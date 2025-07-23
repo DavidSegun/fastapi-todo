@@ -12,7 +12,7 @@ async def overdue_reminder_task():
         overdue_todos = await db.todos.find({"completed": False, "due_date": {"$lt": now}}).to_list(100)
         for todo in overdue_todos:
             print(f"Todo {todo['title']} is overdue!")
-        await asyncio.sleep(30)  # 24 hours
+        await asyncio.sleep(30)  # 30 seconds
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
