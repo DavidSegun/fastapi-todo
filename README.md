@@ -41,3 +41,12 @@ A high-quality RESTful API for managing todo reminders, built with FastAPI and M
 
 ## Notes
 - The background task logs overdue todos every 24h (adjustable for testing).
+
+## Sample Request
+```json
+{
+"title": "Go to work",
+"due_date": "2025-07-23 21:22:50.734730",
+"_id":"1"
+}
+```
