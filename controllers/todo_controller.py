@@ -1,7 +1,9 @@
+from bson import ObjectId
 from models.todo import TodoModel
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from fastapi import HTTPException
 from datetime import datetime
+
 
 async def create_todo_controller(db: AsyncIOMotorDatabase, todo: TodoModel):
     todo_dict = todo.dict(by_alias=True, exclude={"id"})
@@ -25,10 +27,14 @@ async def get_all_todos_controller(db: AsyncIOMotorDatabase, overdue: bool = Non
     return [TodoModel(**todo) for todo in todos]
 
 async def mark_todo_done_controller(db: AsyncIOMotorDatabase, todo_id: str):
-    result = await db.todos.update_one({"_id": todo_id}, {"$set": {"completed": True}})
+    try:
+        object_id = ObjectId(todo_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid todo_id format")
+    result = await db.todos.update_one({"_id": object_id}, {"$set": {"completed": True}})
     if result.modified_count == 0:
         raise HTTPException(status_code=404, detail="Todo not found")
-    todo = await db.todos.find_one({"_id": todo_id})
+    todo = await db.todos.find_one({"_id": object_id})
     if todo:
         todo["_id"] = str(todo["_id"])
         return TodoModel(**todo)
