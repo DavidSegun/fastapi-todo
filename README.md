@@ -41,4 +41,4 @@ A high-quality RESTful API for managing todo reminders, built with FastAPI and M
 
 ## Notes
 - The background task logs overdue todos every 24h (adjustable for testing).
-- JWT authentication can be added to routes as needed. # fastapi-todo
+
