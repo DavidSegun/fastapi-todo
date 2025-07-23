@@ -6,17 +6,13 @@ from datetime import datetime
 import asyncio
 from contextlib import asynccontextmanager
 
-app = FastAPI()
-app.add_middleware(LoggerMiddleware)
-app.include_router(todo_router)
-
 async def overdue_reminder_task():
     while True:
         now = datetime.utcnow()
         overdue_todos = await db.todos.find({"completed": False, "due_date": {"$lt": now}}).to_list(100)
         for todo in overdue_todos:
             print(f"Todo {todo['title']} is overdue!")
-        await asyncio.sleep(86400)  # 24 hours; set lower for testing
+        await asyncio.sleep(86400)  # 24 hours
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -25,3 +21,5 @@ async def lifespan(app: FastAPI):
     task.cancel()
 
 app = FastAPI(lifespan=lifespan)
+app.add_middleware(LoggerMiddleware)
+app.include_router(todo_router)
