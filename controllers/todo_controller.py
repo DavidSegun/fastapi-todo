@@ -2,7 +2,7 @@ from bson import ObjectId
 from models.todo import TodoModel
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from fastapi import HTTPException
-from datetime import datetime
+from datetime import datetime 
 
 
 async def create_todo_controller(db: AsyncIOMotorDatabase, todo: TodoModel):
